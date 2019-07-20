@@ -6,7 +6,7 @@ import * as geolib from 'geolib';
 const router = express.Router();
 
 const url = process.env.MONGODB_URI || 'mongodb://localhost:27017';
-const dbName = 'test';
+const dbName = 'heroku_51s2gcdv';
 const mongo = new MongoClient(url);
 
 
