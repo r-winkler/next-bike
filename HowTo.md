@@ -1,9 +1,21 @@
 # Datenquellen
 
+# Index
+```
+```
+
+# Mongo
+
+```
+mongo ds353457.mlab.com:53457/heroku_51s2gcdv -u rene -p rene123
+```
+
 # Datenimport
 
 ```
-mongoimport --db test --collection bikes --drop --file "C:\Users\René Winkler\Desktop\bikes.json" --jsonArray
+mongoimport --db test --collection bikes --drop --file "C:\Users\René Winkler\Desktop\data\bikes.json" --jsonArray
+
+mongoimport -h ds353457.mlab.com:53457 -d heroku_51s2gcdv -u rene -p rene123 --collection bikes --drop --file "C:\Users\René Winkler\Desktop\data\bikes.json" --jsonArray
 ```
 
 Thun
