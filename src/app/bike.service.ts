@@ -7,7 +7,8 @@ import {Observable} from "rxjs";
 })
 export class BikeService {
 
-  readonly url = "http://localhost:3000/bikes";
+  // readonly url = "http://localhost:3000/bikes";
+  readonly url = "/bikes";
 
   constructor(private http: HttpClient) { }
 
