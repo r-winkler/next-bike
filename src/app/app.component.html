@@ -1,0 +1,27 @@
+<div style="margin-left:20px;margin-right:20px;margin-top:20px">
+  <h1>Velostationen</h1>
+  Umkreis: {{distance}}m
+  <mat-slider style="min-width: 100%;"
+              [max]="2000"
+              [min]="0"
+              [step]="10"
+              [(ngModel)]="distance"
+  (valueChange)="distanceChange$.next(distance)">
+  </mat-slider>
+
+  <p></p>
+
+  <mat-card *ngFor="let bike of bikes$ | async" style="margin-top:40px">
+    <mat-card-header>
+      <mat-card-title>{{bike.distance}}m </mat-card-title>
+      <mat-card-subtitle>{{bike.properties.address}}
+        , {{bike.properties.postcode}} {{bike.properties.city}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        {{bike.properties.rentDE}}
+      </p>
+    </mat-card-content>
+  </mat-card>
+
+</div>
