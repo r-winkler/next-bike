@@ -1,27 +1,76 @@
-# Frontend
+# Next POI
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.1.2.
+Quick and dirty MEAN Stack App. Zeigt die nächst gelegene Veloverleihstation an.
 
-## Development server
+https://shielded-bastion-82542.herokuapp.com/
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Code scaffolding
+# Datenquellen
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+https://opendata.swiss/de/dataset/bikesharing-und-veloverleihsysteme2
 
-## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+# Mongo
 
-## Running unit tests
+```
+mongo ds353457.mlab.com:53457/heroku_51s2gcdv -u ${username} -p ${password}
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+# Datenimport
+Json runterladen und manuall zuschneiden. Datei befindet sich in Ordner 'data'.
 
-## Running end-to-end tests
+lokal
+```
+mongoimport --db test --collection bikes --drop --file "C:\Users\René Winkler\IdeaProjects\next-poi\data\bikes.json" --jsonArray
+```
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+heroku
+```
+mongoimport -h ds353457.mlab.com:53457 -d heroku_51s2gcdv -u ${username} -p ${password} --collection bikes --drop --file "C:\Users\René Winkler\IdeaProjects\next-poi\data\bikes.json" --jsonArray
+```
 
-## Further help
+# Index
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Die geospatial Suche benötigt einen Index. Via mongo shell anlegen:
+
+```
+db.collection.createIndex( { geometry: "2dsphere" } 
+```
+
+# Standort simulieren
+
+via F12 in Dev Tools / Tools/ Sensor
+
+Thun
+```
+7.616276, 46.735265
+```
+
+
+# Geospatial query
+```
+db.bikes.find(
+   {
+     "geometry":
+       { $near:
+          {
+            $geometry: { type: "Point",  coordinates: [ 7.616276, 46.735265 ] },
+            $minDistance: 0,
+            $maxDistance: 300
+          }
+       }
+   }
+).pretty()
+```
+
+
+# Deplyoment auf Heroku
+
+Sehr mühsam :-(
+
+* Verzeichnisstruktur muss genau dem Projekt hier entsprechen (backend und frontend zusammen, ein package.json...)
+* Dieser Anleitung folgen: https://devcenter.heroku.com/articles/mean-apps-restful-api
+* Obwohl man 'heroku login' macht wird beim git push heroku master ein username und passwort angefordert (username = email-adresse, password = api-key => In heroku-dashboard unter account-settings / account / api-key / reveal ersichtlich)
+* Kreditkarte muss hinterlegt werden, damit 'heroku addons:create mongolab' funktioniert
+* in mLab muss ein User angelegt werden, damit Verbindung funktioniert (Users / add database user)
+
